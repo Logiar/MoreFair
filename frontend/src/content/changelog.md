@@ -4,6 +4,17 @@ description: 'A list of all changes made to the game'
 
 # Changelog
 
+## 3.0.8 [PATCH]: Revert Minimum People To Promote
+
+### Balancing
+- Revert Minimum People To Promote change back to scaling with ladders
+
+<br><br><br><br><br><br><br>
+
+<details>
+<summary>Expand for the 3.0.x changelog</summary>
+
+
 ## 3.0.7 [PATCH]: Global Ladder Numbers in Chad
 
 ### Features
@@ -18,11 +29,6 @@ description: 'A list of all changes made to the game'
 
 ### Bugfixes
 - Privacy Policy and Rules should be available again without logging in.
-
-<br><br><br><br><br><br><br>
-
-<details>
-<summary>Expand for the 3.0.x changelog</summary>
 
 ## 3.0.6 [PATCH]: ETA fixes
 
