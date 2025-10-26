@@ -1,7 +1,9 @@
 package de.kaliburg.morefair.game.ladder.model.generation.generator;
 
-import de.kaliburg.morefair.game.ladder.model.generation.LadderGenerationContext;
-import de.kaliburg.morefair.game.ladder.model.generation.steps.LadderGenerationStep;
+import de.kaliburg.morefair.game.ladder.model.generation.LadderGenerationStep;
+import de.kaliburg.morefair.game.ladder.model.generation.LadderGenerator;
+import de.kaliburg.morefair.game.ladder.model.generation.steps.ContextPopulationStep;
+import de.kaliburg.morefair.game.ladder.model.generation.steps.CreateLaddersStep;
 import de.kaliburg.morefair.game.ladder.model.generation.steps.ReverseScalingStep;
 import de.kaliburg.morefair.game.ladder.model.generation.steps.Special100Step;
 import de.kaliburg.morefair.game.round.model.type.RoundType;
@@ -19,15 +21,10 @@ public class Special100LadderGenerator implements LadderGenerator {
   @Override
   public List<LadderGenerationStep> getGenerationSteps() {
     return List.of(
+        new ContextPopulationStep(),
+        new CreateLaddersStep(),
         new Special100Step(),
         new ReverseScalingStep()
     );
-  }
-
-  @Override
-  public LadderGenerationContext configureContext(LadderGenerationContext context) {
-    context = LadderGenerator.super.configureContext(context);
-    context.setAssholeLadderNumber(100);
-    return context;
   }
 }

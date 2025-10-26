@@ -159,7 +159,7 @@ public class LadderEventServiceImpl implements LadderEventService {
       RankerEntity ranker = rankerService.findHighestActiveRankerOfAccount(account)
           .orElseThrow();
 
-      if (!ladder.getId().equals(ranker.getLadderId())) {
+      if (!ladder.getId().equals(ranker.getLadderId()) || ranker.isPromoted()) {
         return false;
       }
 
@@ -193,7 +193,7 @@ public class LadderEventServiceImpl implements LadderEventService {
       RankerEntity ranker = rankerService.findHighestActiveRankerOfAccount(account)
           .orElseThrow();
 
-      if (!ladder.getId().equals(ranker.getLadderId())) {
+      if (!ladder.getId().equals(ranker.getLadderId()) || ranker.isPromoted()) {
         return false;
       }
 
@@ -229,7 +229,7 @@ public class LadderEventServiceImpl implements LadderEventService {
       RankerEntity ranker = rankerService.findHighestActiveRankerOfAccount(account)
           .orElseThrow();
 
-      if (!ladder.getId().equals(ranker.getLadderId())) {
+      if (!ladder.getId().equals(ranker.getLadderId()) || ranker.isPromoted()) {
         return false;
       }
 
@@ -272,7 +272,7 @@ public class LadderEventServiceImpl implements LadderEventService {
       RankerEntity ranker = rankerService.findHighestActiveRankerOfAccount(account)
           .orElseThrow();
 
-      if (!ladder.getId().equals(ranker.getLadderId())) {
+      if (!ladder.getId().equals(ranker.getLadderId()) || ranker.isPromoted()) {
         return false;
       }
 

@@ -89,6 +89,10 @@ public class RankerEntity {
     return promotedOn == null;
   }
 
+  public boolean isPromoted() {
+    return !isGrowing();
+  }
+
   public void addPoints(BigInteger points, int deltaSeconds) {
     this.points = this.points.add(points.multiply(BigInteger.valueOf(deltaSeconds)));
   }
@@ -134,6 +138,5 @@ public class RankerEntity {
     this.grapes = this.grapes.add(grapes.multiply(BigInteger.valueOf(deltaSeconds)))
         .max(BigInteger.ZERO);
   }
-
 
 }

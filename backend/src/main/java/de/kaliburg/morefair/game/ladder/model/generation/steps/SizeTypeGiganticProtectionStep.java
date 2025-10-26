@@ -6,16 +6,20 @@ import de.kaliburg.morefair.game.ladder.model.generation.LadderGenerationContext
 import de.kaliburg.morefair.game.ladder.model.generation.LadderGenerationStep;
 import java.util.List;
 
-public class Special100Step implements LadderGenerationStep {
+public class SizeTypeGiganticProtectionStep implements LadderGenerationStep {
 
   @Override
   public List<LadderEntity> apply(List<LadderEntity> ladders,
-      final LadderGenerationContext context) {
-    // TODO: Implement special Generation
+      LadderGenerationContext context) {
+    for (int i = 0; i < ladders.size() - 1; i++) {
+      LadderEntity currentLadder = ladders.get(i);
+      LadderEntity nextLadder = ladders.get(i + 1);
 
-    ladders.get(ladders.size() - 2).getTypes().add(LadderType.NO_AUTO);
-    ladders.get(ladders.size() - 1).getTypes().add(LadderType.END);
-
+      if (currentLadder.getTypes().contains(LadderType.GIGANTIC)) {
+        nextLadder.getTypes().remove(LadderType.BIG);
+      }
+    }
     return ladders;
   }
+
 }

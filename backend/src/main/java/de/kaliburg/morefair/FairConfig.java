@@ -16,6 +16,7 @@ public class FairConfig {
   private BigInteger basePointsToPromote = BigInteger.valueOf(100_000_000L);
   private BigInteger baseVinegarToThrow = BigInteger.valueOf(500_000L);
   private BigInteger baseGrapesToBuyAutoPromote = BigInteger.valueOf(2_000L);
+  private Integer baseAssholeLadder = 15;
   private Integer autoPromoteLadder = 1;
   private Integer manualPromoteWaitTime = 30;
   private Integer minimumPeopleForPromote = 10;

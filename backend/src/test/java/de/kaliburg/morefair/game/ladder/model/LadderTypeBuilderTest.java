@@ -23,7 +23,7 @@ class LadderTypeBuilderTest {
   static HashMap<Set<RoundType>, HashMap<Set<LadderType>, Integer>> countMapMap = new HashMap<>();
 
   @BeforeAll
-  public static void beforeAll() {
+  static void beforeAll() {
     roundTypesList.add(EnumSet.of(RoundType.DEFAULT));
     roundTypesList.add(EnumSet.of(RoundType.FAST));
     roundTypesList.add(EnumSet.of(RoundType.SLOW));
@@ -96,7 +96,7 @@ class LadderTypeBuilderTest {
   }
 
   @Test
-  @Disabled("First LAdder only can't generate TINY or NAUTO/FAUTO anymore")
+  @Disabled("First Ladder only can't generate TINY or NAUTO/FAUTO anymore")
   void build_FirstLadderOnFastRound_isDefault() {
     Set<RoundType> roundTypes = EnumSet.of(RoundType.FAST);
     Set<LadderType> build = LadderTypeBuilder.builder().setRoundTypes(roundTypes).setRoundNumber(1)
@@ -104,5 +104,6 @@ class LadderTypeBuilderTest {
 
     assertThat(build).containsExactly(LadderType.DEFAULT);
   }
+
 
 }

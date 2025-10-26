@@ -1,7 +1,6 @@
 package de.kaliburg.morefair.game.ladder.model.generation;
 
 import de.kaliburg.morefair.game.ladder.model.LadderEntity;
-import de.kaliburg.morefair.game.ladder.model.generation.generator.LadderGenerator;
 import de.kaliburg.morefair.game.round.model.RoundEntity;
 import de.kaliburg.morefair.game.round.model.type.RoundType;
 import jakarta.annotation.PostConstruct;
