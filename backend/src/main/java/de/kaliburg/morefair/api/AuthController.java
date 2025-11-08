@@ -123,12 +123,13 @@ public class AuthController {
       }
 
       List<AccountEntity> bannedAltAccounts = accountService.searchByIp(ip).stream()
-          .filter(a -> a.getAccessRole().equals(AccountAccessType.BANNED_PLAYER))
+          .filter(AccountEntity::isBanned)
+          .filter(a -> a.getLastLogin().isAfter(OffsetDateTime.now(ZoneOffset.UTC).minusYears(1)))
           .toList();
 
       if (bannedAltAccounts.size() > 2) {
         return HttpUtils.buildErrorMessage(HttpStatus.TOO_MANY_REQUESTS,
-            "Too many banned Accounts");
+            "Too many banned Accounts from this IP");
       }
 
       String confirmToken = UUID.randomUUID().toString();
@@ -332,12 +333,13 @@ public class AuthController {
       }
 
       List<AccountEntity> bannedAltAccounts = accountService.searchByIp(ip).stream()
-          .filter(a -> a.getAccessRole().equals(AccountAccessType.BANNED_PLAYER))
+          .filter(AccountEntity::isBanned)
+          .filter(a -> a.getLastLogin().isAfter(OffsetDateTime.now(ZoneOffset.UTC).minusYears(1)))
           .toList();
 
       if (bannedAltAccounts.size() > 2) {
         return HttpUtils.buildErrorMessage(HttpStatus.TOO_MANY_REQUESTS,
-            "Too many banned Accounts");
+            "Too many banned Accounts from this IP");
       }
 
       UUID uuid = UUID.randomUUID();

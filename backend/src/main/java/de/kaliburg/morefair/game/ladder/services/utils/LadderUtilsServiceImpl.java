@@ -20,7 +20,7 @@ public class LadderUtilsServiceImpl implements LadderUtilsService {
   private final RoundService roundService;
 
   public Integer getRequiredRankerCountToUnlock(LadderEntity ladder) {
-    return config.getMinimumPeopleForPromote();
+    return Math.max(config.getMinimumPeopleForPromote(), ladder.getScaling());
   }
 
   public boolean isLadderUnlocked(@NonNull LadderEntity ladder) {

@@ -1,10 +1,13 @@
 package de.kaliburg.morefair.api;
 
+import de.kaliburg.morefair.api.utils.HttpUtils;
+import de.kaliburg.morefair.api.utils.RequestThrottler;
 import de.kaliburg.morefair.game.round.services.RoundService;
 import de.kaliburg.morefair.game.season.services.SeasonService;
 import de.kaliburg.morefair.statistics.model.dto.RoundResultsDto;
 import de.kaliburg.morefair.statistics.services.RoundResultService;
 import de.kaliburg.morefair.statistics.services.StatisticsService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +29,22 @@ public class StatisticsController {
   private final StatisticsService statisticsService;
   private final RoundResultService roundResultService;
 
+  private final RequestThrottler requestThrottler;
+
   @GetMapping(value = "/round/raw", produces = "application/json")
   public ResponseEntity<?> getRoundResults(
       @RequestParam(name = "season", required = false) Integer seasonNumber,
-      @RequestParam(name = "round", required = false) Integer roundNumber) {
+      @RequestParam(name = "round", required = false) Integer roundNumber,
+      HttpServletRequest request
+  ) {
     try {
+      Integer ip = HttpUtils.getIp(request);
+
+      if (!requestThrottler.canQueryStatistics(ip)) {
+        return HttpUtils.buildErrorMessage(HttpStatus.TOO_MANY_REQUESTS,
+            "Too many requests");
+      }
+
       if (seasonNumber == null) {
         seasonNumber = seasonService.getCurrentSeason().getNumber();
       }
