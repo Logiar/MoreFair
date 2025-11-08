@@ -40,6 +40,12 @@ public enum LadderType implements Comparable<LadderType> {
    */
   private final int priority = 0;
 
+  /**
+   * A comparator for comparing instances of {@link LadderType}. The comparison is primarily based
+   * on the priority value of each {@code LadderType}. If two {@code LadderType} instances have the
+   * same priority, their natural order (based on the {@code compareTo} method of
+   * {@link LadderType}) is used to determine the comparison result.
+   */
   public static class Comparator implements java.util.Comparator<LadderType> {
 
     @Override

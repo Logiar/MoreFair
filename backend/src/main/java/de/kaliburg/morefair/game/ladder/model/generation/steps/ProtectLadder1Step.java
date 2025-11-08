@@ -6,20 +6,22 @@ import de.kaliburg.morefair.game.ladder.model.generation.LadderGenerationContext
 import de.kaliburg.morefair.game.ladder.model.generation.LadderGenerationStep;
 import java.util.List;
 
-public class SizeTypeGiganticProtectionStep implements LadderGenerationStep {
+public class ProtectLadder1Step implements LadderGenerationStep {
 
   @Override
   public List<LadderEntity> apply(List<LadderEntity> ladders,
       LadderGenerationContext context) {
-    for (int i = 0; i < ladders.size() - 1; i++) {
-      LadderEntity currentLadder = ladders.get(i);
-      LadderEntity nextLadder = ladders.get(i + 1);
-
-      if (currentLadder.getTypes().contains(LadderType.GIGANTIC)) {
-        nextLadder.getTypes().remove(LadderType.BIG);
-      }
+    if (ladders == null || ladders.isEmpty()) {
+      return ladders;
     }
+
+    LadderEntity firstLadder = ladders.get(0);
+
+    firstLadder.getTypes().remove(LadderType.FREE_AUTO);
+    firstLadder.getTypes().remove(LadderType.NO_AUTO);
+    firstLadder.getTypes().remove(LadderType.TINY);
+    firstLadder.getTypes().remove(LadderType.LAVA);
+
     return ladders;
   }
-
 }

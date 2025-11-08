@@ -26,22 +26,31 @@ class LadderGenerationServiceTest {
 
   @Test
   void generateLadder_defaultRound_correctLadderList() {
-    RoundEntity round = generateRound(EnumSet.of(RoundType.DEFAULT));
+    for (int i = 0; i < 100; i++) {
+      RoundEntity round = generateRound(EnumSet.of(RoundType.DEFAULT));
 
-    List<LadderEntity> list = ladderGenerationService.generateLaddersForRound(round);
+      List<LadderEntity> list = ladderGenerationService.generateLaddersForRound(round);
 
-    assertThat(list)
-        .hasSize(round.getAssholeLadderNumber() + 1);
-    assertThat(list.get(list.size() - 2).getTypes())
-        .contains(LadderType.ASSHOLE, LadderType.NO_AUTO)
-        .doesNotContain(LadderType.DEFAULT);
-    assertThat(list.get(list.size() - 1).getTypes())
-        .contains(LadderType.END)
-        .doesNotContain(LadderType.DEFAULT);
+      assertThat(list)
+          .hasSize(round.getAssholeLadderNumber() + 1);
+      assertThat(list).map(LadderEntity::getTypes)
+          .doesNotContain(Set.of(LadderType.BOUNTIFUL, LadderType.LAVA, LadderType.CONSOLATION,
+              LadderType.VIRUS, LadderType.GENEROUS, LadderType.TAXES));
 
-    // Check Scaling
-    assertThat(list.get(0).getScaling()).isEqualTo(1);
-    assertThat(list.get(list.size() - 2).getScaling()).isEqualTo(round.getAssholeLadderNumber());
+      assertThat(list.get(0).getTypes())
+          .doesNotContain(LadderType.LAVA, LadderType.TINY, LadderType.FREE_AUTO,
+              LadderType.NO_AUTO);
+      assertThat(list.get(list.size() - 2).getTypes())
+          .contains(LadderType.ASSHOLE, LadderType.NO_AUTO)
+          .doesNotContain(LadderType.DEFAULT, LadderType.FREE_AUTO);
+      assertThat(list.get(list.size() - 1).getTypes())
+          .containsExactly(LadderType.END)
+          .doesNotContain(LadderType.DEFAULT);
+
+      // Check Scaling
+      assertThat(list.get(0).getScaling()).isEqualTo(1);
+      assertThat(list.get(list.size() - 2).getScaling()).isEqualTo(round.getAssholeLadderNumber());
+    }
   }
 
   @Test
