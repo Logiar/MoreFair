@@ -16,9 +16,20 @@ const getMinimumPeopleForPromote = computed<number>(() => {
     return round.state.settings.minimumPeopleForPromote;
   }
 
-  return Math.max(
-    round.state.settings.minimumPeopleForPromote,
-    ladder.state.scaling,
+  if (round.state.types.has(RoundType.RACE)) {
+    return 0;
+  }
+
+  if (round.state.types.has(RoundType.FAST)) {
+    return round.state.settings.minimumPeopleForPromote;
+  }
+
+  return Math.min(
+    Math.max(
+      round.state.settings.minimumPeopleForPromote,
+      ladder.state.scaling,
+    ),
+    round.state.settings.maximumPeopleForPromote,
   );
 });
 

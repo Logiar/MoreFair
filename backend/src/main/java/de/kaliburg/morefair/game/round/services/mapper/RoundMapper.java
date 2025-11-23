@@ -40,6 +40,7 @@ public class RoundMapper {
             RoundSettingsDto.builder()
                 .basePointsForPromote(round.getBasePointsRequirement().toString())
                 .minimumPeopleForPromote(fairConfig.getMinimumPeopleForPromote())
+                .maximumPeopleForPromote(fairConfig.getMaximumPeopleForPromote())
                 .baseVinegarNeededToThrow(fairConfig.getBaseVinegarToThrow().toString())
                 .manualPromoteWaitTime(fairConfig.getManualPromoteWaitTime())
                 .baseGrapesNeededToAutoPromote(

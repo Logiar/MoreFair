@@ -3,6 +3,7 @@ import Decimal from "break_infinity.js";
 export type RoundSettingsData = {
   basePointsForPromote: Decimal;
   minimumPeopleForPromote: number;
+  maximumPeopleForPromote: number;
   baseVinegarNeededToThrow: Decimal;
   baseGrapesNeededToAutoPromote: Decimal;
   manualPromoteWaitTime: number;
@@ -13,6 +14,7 @@ export type RoundSettingsData = {
 export class RoundSettings implements RoundSettingsData {
   basePointsForPromote: Decimal = new Decimal(1000);
   minimumPeopleForPromote = 10;
+  maximumPeopleForPromote = 20;
   baseVinegarNeededToThrow: Decimal = new Decimal(1000);
   baseGrapesNeededToAutoPromote: Decimal = new Decimal(1000);
   manualPromoteWaitTime = 30;
