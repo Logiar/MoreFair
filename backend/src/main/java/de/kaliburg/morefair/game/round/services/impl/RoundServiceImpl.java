@@ -3,10 +3,14 @@ package de.kaliburg.morefair.game.round.services.impl;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import de.kaliburg.morefair.FairConfig;
+import de.kaliburg.morefair.api.RoundController;
 import de.kaliburg.morefair.api.utils.WsUtils;
 import de.kaliburg.morefair.core.concurrency.CriticalRegion;
+import de.kaliburg.morefair.events.Event;
+import de.kaliburg.morefair.events.types.RoundEventTypes;
 import de.kaliburg.morefair.game.round.model.RoundEntity;
 import de.kaliburg.morefair.game.round.model.RoundTypeSetBuilder;
+import de.kaliburg.morefair.game.round.model.type.RoundType;
 import de.kaliburg.morefair.game.round.services.RoundService;
 import de.kaliburg.morefair.game.round.services.repositories.RoundRepository;
 import de.kaliburg.morefair.game.round.services.utils.impl.RoundUtilsServiceImpl;
@@ -20,6 +24,8 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -33,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoundServiceImpl implements RoundService {
 
   private static final Random random = new Random();
+  @Getter
   private final CriticalRegion semaphore = new CriticalRegion(1);
   private final RoundRepository roundRepository;
   private final SeasonService seasonService;
@@ -64,7 +71,7 @@ public class RoundServiceImpl implements RoundService {
     try (var ignored = semaphore.enter()) {
       if (currentRoundId == null) {
         SeasonEntity currentSeason = seasonService.getCurrentSeason();
-        // Find newest Round of that Season
+        // Find the newest Round of that Season
         RoundEntity round = roundRepository.findNewestRoundOfSeason(currentSeason.getId())
             .orElse(null);
 
@@ -122,6 +129,36 @@ public class RoundServiceImpl implements RoundService {
       throw new RuntimeException(e);
     }
   }
+
+  @Override
+  public RoundEntity updateCurrentRoundTypes(Set<RoundType> newTypes) {
+    try (var ignored = semaphore.enter()) {
+      RoundEntity currentRound = roundCache.get(currentRoundId);
+      currentRound.setTypes(newTypes);
+
+      roundRepository.save(currentRound);
+      roundCache.put(currentRound.getId(), currentRound);
+
+      Event<RoundEventTypes> e = new Event<>(RoundEventTypes.UPDATE_TYPES);
+      e.setData(currentRound.getTypes());
+      wsUtils.convertAndSendToTopic(RoundController.TOPIC_EVENTS_DESTINATION, e);
+
+      return currentRound;
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Transactional
+  @Override
+  public RoundEntity save(RoundEntity round) {
+    RoundEntity result = roundRepository.save(round);
+    roundCache.put(result.getId(), result);
+
+    return result;
+  }
+
 
   private Optional<RoundEntity> create(@Nullable RoundEntity previousRound) {
     SeasonEntity currentSeason = seasonService.getCurrentSeason();

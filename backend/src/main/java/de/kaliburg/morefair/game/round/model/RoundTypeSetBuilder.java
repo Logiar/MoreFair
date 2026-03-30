@@ -1,6 +1,7 @@
 package de.kaliburg.morefair.game.round.model;
 
 import de.kaliburg.morefair.game.round.model.type.RoundType;
+import de.kaliburg.morefair.utils.DateUtils;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -63,6 +64,10 @@ public class RoundTypeSetBuilder {
   public Set<RoundType> build() {
     if (roundNumber == 100) {
       return EnumSet.of(RoundType.SPECIAL_100, RoundType.REVERSE_SCALING);
+    }
+
+    if (DateUtils.isAprilFoolsDay()) {
+      return EnumSet.of(RoundType.APRIL_FOOLS, RoundType.REVERSE_SCALING);
     }
 
     if (roundNumber % 10 == 0) {

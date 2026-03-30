@@ -12,14 +12,12 @@ import de.kaliburg.morefair.game.ranker.services.RankerService;
 import de.kaliburg.morefair.game.season.model.AchievementsEntity;
 import de.kaliburg.morefair.game.season.services.AchievementsService;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
  * The Mapper that can convert the {@link AccountEntity AccountEntities} to DTOs.
  */
 @Component
-@RequiredArgsConstructor
 public class AccountMapper {
 
   private final LadderService ladderService;
@@ -28,6 +26,17 @@ public class AccountMapper {
   private final AccountSettingsMapper accountSettingsMapper;
   private final AchievementsService achievementsService;
   private final FairConfig fairConfig;
+
+  public AccountMapper(LadderService ladderService, RankerService rankerService,
+      AccountSettingsService accountSettingsService, AccountSettingsMapper accountSettingsMapper,
+      AchievementsService achievementsService, FairConfig fairConfig) {
+    this.ladderService = ladderService;
+    this.rankerService = rankerService;
+    this.accountSettingsService = accountSettingsService;
+    this.accountSettingsMapper = accountSettingsMapper;
+    this.achievementsService = achievementsService;
+    this.fairConfig = fairConfig;
+  }
 
   /**
    * Mapping the {@link AccountEntity} to a {@link AccountDetailsDto}.

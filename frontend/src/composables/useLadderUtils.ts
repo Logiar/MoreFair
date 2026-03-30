@@ -16,8 +16,12 @@ const getMinimumPeopleForPromote = computed<number>(() => {
     return round.state.settings.minimumPeopleForPromote;
   }
 
+  if (round.state.types.has(RoundType.APRIL_FOOLS)) {
+    return 4;
+  }
+
   if (round.state.types.has(RoundType.RACE)) {
-    return 0;
+    return 1;
   }
 
   if (round.state.types.has(RoundType.FAST)) {
@@ -193,6 +197,9 @@ function getBottomGrapes() {
   if (ladder.state.types.has(LadderType.BOUNTIFUL)) {
     return 5;
   } else if (ladder.state.types.has(LadderType.LAVA)) {
+    if (round.state.types.has(RoundType.APRIL_FOOLS)) {
+      return -1;
+    }
     return 0;
   }
   return 1;

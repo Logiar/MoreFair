@@ -82,7 +82,11 @@ public final class LadderEntity {
 
     if (round.getTypes().contains(RoundType.REVERSE_SCALING)) {
       // Makes Ladder 1 be Asshole Ladder Scaling etc.
-      this.scaling = Math.max(round.getAssholeLadderNumber() + 1 - number, 1);
+      if (round.getTypes().contains(RoundType.APRIL_FOOLS)) {
+        this.scaling = Math.max(100 + 1 - number, 1);
+      } else {
+        this.scaling = Math.max(round.getAssholeLadderNumber() + 1 - number, 1);
+      }
     } else {
       this.scaling = number;
     }

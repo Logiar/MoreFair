@@ -23,7 +23,8 @@ public enum RoundType {
   RACE(2),
   // Unused
   REVERSE_SCALING,
-  SPECIAL_100;
+  SPECIAL_100,
+  APRIL_FOOLS;
 
   private int priority = 0;
 

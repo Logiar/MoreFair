@@ -10,4 +10,6 @@ public interface LadderUtilsService {
   boolean isLadderUnlocked(@NonNull LadderEntity ladder);
 
   boolean isLadderPromotable(@NonNull LadderEntity ladder);
+
+  Integer getBottomGrapes(@NonNull LadderEntity ladder);
 }

@@ -6,6 +6,7 @@ import de.kaliburg.morefair.game.ladder.services.LadderService;
 import de.kaliburg.morefair.game.round.model.RoundEntity;
 import de.kaliburg.morefair.game.round.model.dto.RoundDto;
 import de.kaliburg.morefair.game.round.model.dto.RoundDto.RoundSettingsDto;
+import de.kaliburg.morefair.game.round.model.type.RoundType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -31,10 +32,15 @@ public class RoundMapper {
   public RoundDto mapToRoundDto(RoundEntity round) {
     List<LadderEntity> ladders = ladderService.findAllByRound(round);
 
+    int assholeNumber = round.getAssholeLadderNumber();
+    if (round.getTypes().contains(RoundType.APRIL_FOOLS)) {
+      assholeNumber = 100;
+    }
+
     return RoundDto.builder()
         .autoPromoteLadder(fairConfig.getAutoPromoteLadder())
         .topLadder(ladders.size())
-        .assholeLadder(round.getAssholeLadderNumber())
+        .assholeLadder(assholeNumber)
         .types(round.getTypes())
         .settings(
             RoundSettingsDto.builder()

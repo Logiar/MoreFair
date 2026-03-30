@@ -21,6 +21,7 @@ export enum RoundType {
   FARMER = "FARMER",
   RACE = "RACE",
   REVERSE_SCALING = "REVERSE_SCALING",
+  APRIL_FOOLS = "APRIL_FOOLS",
   SPECIAL_100 = "SPECIAL_100",
 }
 
@@ -28,6 +29,7 @@ export enum RoundEventType {
   RESET = "RESET",
   INCREASE_ASSHOLE_LADDER = "INCREASE_ASSHOLE_LADDER",
   INCREASE_TOP_LADDER = "INCREASE_TOP_LADDER",
+  UPDATE_TYPES = "UPDATE_TYPES",
   JOIN = "JOIN",
 }
 
@@ -96,14 +98,14 @@ export const useRoundStore = defineStore("round", () => {
       });
   }
 
-  function handleRoundEvent(body: OnRoundEventBody) {
-    const event = body.eventType;
-    switch (event) {
+  function handleRoundEvent(event: OnRoundEventBody) {
+    const type = event.eventType;
+    switch (type) {
       case RoundEventType.INCREASE_ASSHOLE_LADDER:
-        state.assholeLadder = Math.max(body.data, state.assholeLadder);
+        state.assholeLadder = event.data;
         break;
       case RoundEventType.INCREASE_TOP_LADDER:
-        state.topLadder = Math.max(body.data, state.topLadder);
+        state.topLadder = Math.max(event.data, state.topLadder);
         break;
       case RoundEventType.RESET:
         isInitialized.value = false;
@@ -114,10 +116,14 @@ export const useRoundStore = defineStore("round", () => {
         useStomp().reset();
         break;
       case RoundEventType.JOIN:
-        useChatStore().state.suggestions.push(body.data);
+        useChatStore().state.suggestions.push(event.data);
+        break;
+      case RoundEventType.UPDATE_TYPES:
+        state.types.clear();
+        event.data.forEach((t: RoundType) => state.types.add(t));
         break;
       default:
-        console.error("Unknown event type", event);
+        console.error("Unknown event type", type);
         break;
     }
   }

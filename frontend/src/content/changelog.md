@@ -4,6 +4,10 @@ description: 'A list of all changes made to the game'
 
 # Changelog
 
+## 3.0.10 [PATCH]: Empty Patch
+
+- Nothing new really, Or is it?
+
 ## 3.0.9 [PATCH]: Adjusting People to Promote
 
 ### Balancing

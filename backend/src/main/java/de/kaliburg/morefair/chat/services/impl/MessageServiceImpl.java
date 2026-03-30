@@ -3,6 +3,7 @@ package de.kaliburg.morefair.chat.services.impl;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import de.kaliburg.morefair.account.model.AccountEntity;
+import de.kaliburg.morefair.account.services.repositories.AccountRepository;
 import de.kaliburg.morefair.api.utils.WsUtils;
 import de.kaliburg.morefair.chat.model.ChatEntity;
 import de.kaliburg.morefair.chat.model.MessageEntity;
@@ -33,18 +34,21 @@ public class MessageServiceImpl implements MessageService {
   private final CriticalRegion semaphore = new CriticalRegion(1);
   private final MessageRepository messageRepository;
   private final ChatService chatService;
+  private final AccountRepository accountRepository;
   private final WsUtils wsUtils;
   private final LoadingCache<Long, List<MessageEntity>> messagesChatIdCache;
   private final MessageMapper messageMapper;
   private final RankerService rankerService;
 
   public MessageServiceImpl(MessageRepository messageRepository, ChatService chatService,
-      WsUtils wsUtils, MessageMapper messageMapper, RankerService rankerService) {
+      WsUtils wsUtils, MessageMapper messageMapper, RankerService rankerService,
+      AccountRepository accountRepository) {
     this.messageRepository = messageRepository;
     this.chatService = chatService;
     this.rankerService = rankerService;
     this.wsUtils = wsUtils;
     this.messageMapper = messageMapper;
+    this.accountRepository = accountRepository;
 
     messagesChatIdCache = Caffeine.newBuilder()
         .build(this.messageRepository::findNewestMessagesByChatId);
@@ -114,18 +118,17 @@ public class MessageServiceImpl implements MessageService {
     }
   }
 
-
   private MessageEntity save(MessageEntity message) {
     MessageEntity result = messageRepository.save(message);
     ChatEntity chat = chatService.find(result.getChatId());
 
     List<MessageEntity> chatMessages = messagesChatIdCache.get(chat.getId());
     if (chatMessages.stream().anyMatch(m -> m.getId().equals(result.getId()))) {
-      //Replace old message with new one
+      // Replace old messages with new one
       chatMessages = chatMessages.stream()
           .map(m -> m.getId().equals(result.getId()) ? result : m).collect(Collectors.toList());
     } else {
-      //Add new message to cache and delete last one if over limit
+      // Add new messages to cache and delete last one if over limit
       chatMessages.add(0, result);
       chatMessages.sort(MessageEntity::compareTo);
       if (chatMessages.size() > MessageRepository.MESSAGES_PER_PAGE) {

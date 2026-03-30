@@ -47,6 +47,7 @@ import de.kaliburg.morefair.game.vinegar.model.dto.ThrowRecordResponse;
 import de.kaliburg.morefair.game.vinegar.services.VinegarThrowService;
 import de.kaliburg.morefair.game.vinegar.services.mapper.VinegarThrowMapper;
 import de.kaliburg.morefair.statistics.services.StatisticsService;
+import de.kaliburg.morefair.utils.DateUtils;
 import de.kaliburg.morefair.utils.FormattingUtils;
 import java.math.BigInteger;
 import java.time.OffsetDateTime;
@@ -290,6 +291,8 @@ public class LadderEventServiceImpl implements LadderEventService {
         newRanker.setGrapes(ranker.getGrapes());
         LadderEntity newLadder = ladderService.findLadderById(newRanker.getLadderId())
             .orElseThrow();
+        List<RankerEntity> newRankers =
+            rankerService.findAllByLadderId(newLadder.getId());
 
         // Auto-Ladder
         int number = Math.floorDiv(newLadder.getNumber(), 2) - 2;
@@ -335,6 +338,18 @@ public class LadderEventServiceImpl implements LadderEventService {
               assholeLadder.getNumber(), e);
         }
 
+        // APRIL_FOOLS Logic for spawning a sudden end AH to end a non AF round
+        // Needs to be here instead of the LadderService because otherwise we cannot send a message
+        if (DateUtils.isAprilFoolsDay()
+            && !currentRound.getTypes().contains(RoundType.APRIL_FOOLS)
+            && newLadder.getTypes().contains(LadderType.ASSHOLE)
+            && newRankers.size() <= 1) {
+          accountService.findBroadcaster().ifPresent(broadCaster ->
+              messageService.create(broadCaster, chatService.find(ChatType.SYSTEM),
+                  "This has been quite repetitive.. Let's change things up a bit, shall we?")
+          );
+        }
+
         UnlocksEntity unlocks = unlocksService.findOrCreateByAccountInCurrentRound(account.getId());
         AchievementsEntity achievements =
             achievementsService.findOrCreateByAccountInCurrentSeason(account.getId());
@@ -351,8 +366,6 @@ public class LadderEventServiceImpl implements LadderEventService {
         }
 
         // Rewards for finishing first / at the top
-        List<RankerEntity> newRankers =
-            rankerService.findAllByLadderId(newLadder.getId());
         if (newRankers.size() <= 1) {
           if (!ladder.getTypes().contains(LadderType.TAXES)) {
             newRanker.setAutoPromote(true);

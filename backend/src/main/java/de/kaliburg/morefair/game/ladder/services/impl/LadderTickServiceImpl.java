@@ -153,7 +153,7 @@ public class LadderTickServiceImpl implements LadderTickService {
     if (!rankers.isEmpty()) {
       RankerEntity lastRanker = rankers.get(rankers.size() - 1);
       if (lastRanker.isGrowing()) {
-        lastRanker.addGrapes(BigInteger.valueOf(ladder.getBottomGrapes()), delta);
+        lastRanker.addGrapes(BigInteger.valueOf(ladderUtilsService.getBottomGrapes(ladder)), delta);
       }
     }
 
