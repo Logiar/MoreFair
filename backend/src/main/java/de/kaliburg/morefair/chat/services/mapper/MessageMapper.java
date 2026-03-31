@@ -11,20 +11,26 @@ import de.kaliburg.morefair.game.ladder.services.LadderService;
 import de.kaliburg.morefair.game.season.model.AchievementsEntity;
 import de.kaliburg.morefair.game.season.services.AchievementsService;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
  * The Mapper that can convert the {@link MessageEntity MessageEntities} to DTOs.
  */
 @Component
-@RequiredArgsConstructor
 public class MessageMapper {
 
   private final AccountService accountService;
   private final AchievementsService achievementsService;
   private final LadderService ladderService;
   private final FairConfig fairConfig;
+
+  public MessageMapper(AccountService accountService, AchievementsService achievementsService,
+      LadderService ladderService, FairConfig fairConfig) {
+    this.accountService = accountService;
+    this.achievementsService = achievementsService;
+    this.ladderService = ladderService;
+    this.fairConfig = fairConfig;
+  }
 
   /**
    * Mapping the {@link MessageEntity} to a {@link MessageDto}.

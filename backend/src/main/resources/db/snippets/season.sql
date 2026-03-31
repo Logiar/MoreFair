@@ -8,7 +8,7 @@ $$
         SELECT nextval('seq_season') INTO season_id;
 
         INSERT INTO public.season (id, number)
-        VALUES (season_id, 2);
+        VALUES (season_id, 3);
 
         INSERT INTO public.season_type (season_entity_id, types)
         VALUES (season_id, 'DEFAULT');

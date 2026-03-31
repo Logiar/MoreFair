@@ -4,6 +4,17 @@ description: 'A list of all changes made to the game'
 
 # Changelog
 
+## 3.0.10 [PATCH]: Empty Patch
+
+- Nothing new really, Or is it?
+
+## 3.0.9 [PATCH]: Adjusting People to Promote
+
+### Balancing
+- Set up a Maximum People to Promote at 20
+- FAST rounds now always stay at the minimum amount of people to promote
+- RACE Rounds don't need any other people to promote, only points count.
+
 ## 3.0.8 [PATCH]: Revert Minimum People To Promote
 
 ### Balancing

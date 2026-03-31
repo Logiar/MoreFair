@@ -10,16 +10,20 @@ import de.kaliburg.morefair.core.concurrency.CriticalRegion;
 import de.kaliburg.morefair.events.Event;
 import de.kaliburg.morefair.events.types.RoundEventTypes;
 import de.kaliburg.morefair.game.ladder.model.LadderEntity;
+import de.kaliburg.morefair.game.ladder.model.LadderType;
 import de.kaliburg.morefair.game.ladder.services.LadderService;
 import de.kaliburg.morefair.game.ladder.services.repositories.LadderRepository;
 import de.kaliburg.morefair.game.round.model.RoundEntity;
+import de.kaliburg.morefair.game.round.model.type.RoundType;
 import de.kaliburg.morefair.game.round.services.RoundService;
+import de.kaliburg.morefair.utils.DateUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -142,8 +146,30 @@ public class LadderServiceImpl implements LadderService {
               .map(ladderCache::get)
               .orElse(null);
 
+      RoundEntity currentRound = roundService.getCurrentRound();
       LadderEntity result =
-          new LadderEntity(ladderNumber, roundService.getCurrentRound(), previousLadder);
+          new LadderEntity(ladderNumber, currentRound, previousLadder);
+
+      // If april fools but round type not anything special then schedule AH
+      if (DateUtils.isAprilFoolsDay()
+          && !currentRound.getTypes().contains(RoundType.APRIL_FOOLS)
+          && !currentRound.getTypes().contains(RoundType.SPECIAL_100)) {
+        if (previousLadder != null && previousLadder.getTypes().contains(LadderType.ASSHOLE)) {
+          result.setTypes(EnumSet.of(LadderType.END));
+        } else {
+          result.setTypes(EnumSet.of(LadderType.ASSHOLE, LadderType.NO_AUTO, LadderType.SMALL,
+              LadderType.CHEAP));
+
+          currentRound.setAssholeLadderNumber(ladderNumber);
+          roundService.save(currentRound);
+
+          Event<RoundEventTypes> topLadderEvent = new Event<>(
+              RoundEventTypes.INCREASE_ASSHOLE_LADDER);
+          topLadderEvent.setData(ladderNumber);
+          wsUtils.convertAndSendToTopic(RoundController.TOPIC_EVENTS_DESTINATION, topLadderEvent);
+        }
+      }
+
       result = this.save(result);
 
       Event<RoundEventTypes> topLadderEvent = new Event<>(RoundEventTypes.INCREASE_TOP_LADDER);

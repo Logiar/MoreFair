@@ -25,6 +25,7 @@ public class RoundDto {
 
     private String basePointsForPromote;
     private Integer minimumPeopleForPromote;
+    private Integer maximumPeopleForPromote;
     private String baseVinegarNeededToThrow;
     private String baseGrapesNeededToAutoPromote;
     private Integer manualPromoteWaitTime;

@@ -346,6 +346,10 @@ modifier:
     title: "100"
     description: ???
     identifier: "100"
+  APRIL_FOOLS:
+    title: Default
+    description: Nothing special at all. Or is it?
+    identifier: DEF
   END:
     title: The End
     description: There is nowhere else to go. Or is there?

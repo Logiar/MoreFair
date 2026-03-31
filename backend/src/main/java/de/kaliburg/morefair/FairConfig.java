@@ -20,6 +20,7 @@ public class FairConfig {
   private Integer autoPromoteLadder = 1;
   private Integer manualPromoteWaitTime = 30;
   private Integer minimumPeopleForPromote = 10;
+  private Integer maximumPeopleForPromote = 20;
   private Secrets secrets;
   private Integer minVinegarPercentageThrown = 25;
   private Integer maxVinegarThrown = 100;

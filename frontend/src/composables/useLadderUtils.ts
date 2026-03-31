@@ -16,9 +16,24 @@ const getMinimumPeopleForPromote = computed<number>(() => {
     return round.state.settings.minimumPeopleForPromote;
   }
 
-  return Math.max(
-    round.state.settings.minimumPeopleForPromote,
-    ladder.state.scaling,
+  if (round.state.types.has(RoundType.APRIL_FOOLS)) {
+    return 4;
+  }
+
+  if (round.state.types.has(RoundType.RACE)) {
+    return 1;
+  }
+
+  if (round.state.types.has(RoundType.FAST)) {
+    return round.state.settings.minimumPeopleForPromote;
+  }
+
+  return Math.min(
+    Math.max(
+      round.state.settings.minimumPeopleForPromote,
+      ladder.state.scaling,
+    ),
+    round.state.settings.maximumPeopleForPromote,
   );
 });
 
@@ -182,6 +197,9 @@ function getBottomGrapes() {
   if (ladder.state.types.has(LadderType.BOUNTIFUL)) {
     return 5;
   } else if (ladder.state.types.has(LadderType.LAVA)) {
+    if (round.state.types.has(RoundType.APRIL_FOOLS)) {
+      return -1;
+    }
     return 0;
   }
   return 1;

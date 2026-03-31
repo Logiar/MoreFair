@@ -168,6 +168,10 @@ public class LadderTypeBuilder {
       return specialRoundBuilder();
     }
 
+    if (roundTypes.contains(RoundType.APRIL_FOOLS)) {
+      return aprilFoolsBuilder();
+    }
+
     if (ladderNumber > assholeLadderNumber) {
       return EnumSet.of(LadderType.END);
     }
@@ -273,6 +277,35 @@ public class LadderTypeBuilder {
           e);
     }
     return LadderType.DEFAULT;
+  }
+
+  private Set<LadderType> aprilFoolsBuilder() {
+    if (ladderNumber == 1) {
+      return EnumSet.of(LadderType.SMALL, LadderType.CHEAP,
+          LadderType.BOUNTIFUL, LadderType.GENEROUS, LadderType.CONSOLATION,
+          LadderType.FREE_AUTO);
+    }
+
+    if (ladderNumber.equals(assholeLadderNumber)) {
+      return EnumSet.of(LadderType.ASSHOLE, LadderType.GIGANTIC, LadderType.CHEAP,
+          LadderType.NO_AUTO);
+    }
+
+    if (ladderNumber.equals(assholeLadderNumber + 1)) {
+      return EnumSet.of(LadderType.END);
+    }
+
+    int chance = random.nextInt(100);
+
+    if (chance < 20) {
+      return EnumSet.of(LadderType.SMALL, LadderType.CHEAP,
+          LadderType.BOUNTIFUL, LadderType.GENEROUS, LadderType.CONSOLATION,
+          LadderType.FREE_AUTO);
+    } else {
+      return EnumSet.of(LadderType.TINY, LadderType.EXPENSIVE,
+          LadderType.LAVA, LadderType.VIRUS, LadderType.TAXES,
+          LadderType.NO_AUTO);
+    }
   }
 
   private Set<LadderType> specialRoundBuilder() {
