@@ -1,18 +1,45 @@
 package de.kaliburg.morefair.game.round.services;
 
+import de.kaliburg.morefair.game.round.model.RoundEntity;
 import de.kaliburg.morefair.game.round.model.UnlocksEntity;
+import de.kaliburg.morefair.game.round.services.repositories.UnlocksRepository;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface UnlocksService {
+@Service
+@RequiredArgsConstructor
+public class UnlocksService {
 
-  Optional<UnlocksEntity> findByAccountInCurrentRound(Long accountId);
+  private final UnlocksRepository repository;
+  private final RoundService roundService;
 
-  UnlocksEntity save(UnlocksEntity unlocks);
+  public Optional<UnlocksEntity> findByAccountInCurrentRound(Long accountId) {
+    RoundEntity currentRound = roundService.getCurrentRound();
+    return repository.findFirstByAccountIdAndRoundId(accountId, currentRound.getId());
+  }
 
-  UnlocksEntity createForAccountInCurrentRound(Long accountId);
+  @Transactional
+  public UnlocksEntity save(UnlocksEntity u) {
+    return repository.save(u);
+  }
 
-  default UnlocksEntity findOrCreateByAccountInCurrentRound(Long accountId) {
+  @Transactional
+  public UnlocksEntity findOrCreateByAccountInCurrentRound(Long accountId) {
     return findByAccountInCurrentRound(accountId)
         .orElseGet(() -> createForAccountInCurrentRound(accountId));
   }
+
+
+  private UnlocksEntity createForAccountInCurrentRound(Long accountId) {
+    RoundEntity currentRound = roundService.getCurrentRound();
+    UnlocksEntity result = UnlocksEntity.builder()
+        .accountId(accountId)
+        .roundId(currentRound.getId())
+        .build();
+
+    return repository.save(result);
+  }
+
 }

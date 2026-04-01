@@ -15,7 +15,6 @@ import de.kaliburg.morefair.game.ranker.services.utils.RankerUtilsService;
 import de.kaliburg.morefair.game.round.model.RoundEntity;
 import de.kaliburg.morefair.game.round.services.RoundService;
 import de.kaliburg.morefair.game.season.services.AchievementsService;
-import de.kaliburg.morefair.game.season.services.SeasonService;
 import de.kaliburg.morefair.game.vinegar.model.VinegarThrowEntity;
 import de.kaliburg.morefair.game.vinegar.model.VinegarThrowEntity.VinegarThrowEntityBuilder;
 import de.kaliburg.morefair.game.vinegar.services.VinegarThrowService;
@@ -34,7 +33,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class VinegarThrowServiceImpl implements VinegarThrowService {
 
-  private final SeasonService seasonService;
   private final RoundService roundService;
   private final AchievementsService achievementsService;
   private final VinegarThrowRepository repository;

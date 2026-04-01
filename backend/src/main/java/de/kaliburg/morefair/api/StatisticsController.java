@@ -6,7 +6,6 @@ import de.kaliburg.morefair.game.round.services.RoundService;
 import de.kaliburg.morefair.game.season.services.SeasonService;
 import de.kaliburg.morefair.statistics.model.dto.RoundResultsDto;
 import de.kaliburg.morefair.statistics.services.RoundResultService;
-import de.kaliburg.morefair.statistics.services.StatisticsService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,6 @@ public class StatisticsController {
 
   private final RoundService roundService;
   private final SeasonService seasonService;
-  private final StatisticsService statisticsService;
   private final RoundResultService roundResultService;
 
   private final RequestThrottler requestThrottler;
@@ -77,42 +75,4 @@ public class StatisticsController {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-  // TODO: Implement a Statistics Calculator again
-//  @GetMapping(value = "/round", produces = "application/json")
-//  public ResponseEntity<RoundStatisticsEntity> getRoundStatistics(
-//      @RequestParam(name = "round", required = false) Integer roundNumber) {
-//    try {
-//      if (roundNumber == null) {
-//        roundNumber = roundService.getCurrentRound().getNumber() - 1;
-//      }
-//
-//      if (roundNumber >= roundService.getCurrentRound().getNumber()) {
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//      }
-//
-//      RoundStatisticsEntity results = statisticsService.getRoundStatistics(roundNumber);
-//      if (results == null) {
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//      }
-//      return new ResponseEntity<>(results, HttpStatus.OK);
-//    } catch (Exception e) {
-//      log.error(e.getMessage(), e);
-//      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//  }
-//
-//  @GetMapping(value = "/activity", produces = "application/json")
-//  public ResponseEntity<ActivityAnalysisEntity> getRoundStatistics() {
-//    try {
-//      ActivityAnalysisEntity results = statisticsService.getActivityAnalysis();
-//      if (results == null) {
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//      }
-//      return new ResponseEntity<>(results, HttpStatus.OK);
-//    } catch (Exception e) {
-//      log.error(e.getMessage(), e);
-//      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//  }
 }

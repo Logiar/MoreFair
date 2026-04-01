@@ -3,7 +3,6 @@ package de.kaliburg.morefair.api;
 import de.kaliburg.morefair.FairConfig;
 import de.kaliburg.morefair.account.model.AccountEntity;
 import de.kaliburg.morefair.account.services.AccountService;
-import de.kaliburg.morefair.api.utils.WsUtils;
 import de.kaliburg.morefair.api.websockets.messages.WsMessage;
 import de.kaliburg.morefair.events.Event;
 import de.kaliburg.morefair.events.types.LadderEventType;
@@ -45,7 +44,6 @@ public class LadderController {
   private static final String APP_PROMOTE_DESTINATION = "/ladder/promote";
   private static final String APP_AUTOPROMOTE_DESTINATION = "/ladder/autoPromote";
   private final AccountService accountService;
-  private final WsUtils wsUtils;
   private final RoundService roundService;
   private final LadderService ladderService;
   private final LadderTickService ladderTickService;
